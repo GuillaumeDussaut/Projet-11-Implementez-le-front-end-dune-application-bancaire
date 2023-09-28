@@ -1,0 +1,35 @@
+.featuresContainer{
+    flex:1;
+    .features {
+      margin:10px;
+      display: flex;
+      flex-direction: row;
+      .feature-item {
+        flex: 1;
+        padding: 2.5rem;
+        .feature-icon {
+          width: 110px;
+          border: 11px solid #00bc77;
+          border-radius: 50%;
+          padding: 1rem;
+        }
+        .feature-item-title {
+          color: #222;
+          font-size: 1.35rem;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+        p{
+          font-size: 1.1em;
+        }
+      }
+    }
+}
+
+@media screen and (max-width: 920px) {
+  .featuresContainer{
+    .features {
+      flex-direction: column;
+    }
+  }
+}
