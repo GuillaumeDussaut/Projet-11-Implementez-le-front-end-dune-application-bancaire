@@ -32,6 +32,14 @@ header{
       }
     }
     .signinContainer{
+      width: auto;
+      i{
+        font-size:30px;
+        margin: auto 10px;
+      }
+      .connecté{
+        cursor:pointer;
+      }
       .main-nav-item {
         text-decoration: none;
         margin-right: 0.5rem;

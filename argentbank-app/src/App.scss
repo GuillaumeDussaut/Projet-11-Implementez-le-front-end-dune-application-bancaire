@@ -41,7 +41,11 @@
           font-size: 1.2rem;
         }
       }
+      .input-remember input{
+        margin-right:5px;
+      }
       .sign-in-button {
+        cursor:pointer;
         display: block;
         width: 100%;
         padding: 8px;
@@ -52,6 +56,14 @@
         background-color: #00bc77;
         color: #fff;
       }
+      .sign-in-button:hover{
+        transform:scale(1.05); 
+      }
+
+      
+    }
+    .errorMsg{
+      color:red;
     }
   }
 }
@@ -60,13 +72,13 @@
 
 .mainContainer {
   width: 100%;
-  height: 85vh;
-  border-top: 1px solid white;
   background-color: #12002b;
   flex: 1;
+  padding-bottom:50px;
   .header {
     color: #fff;
     margin-bottom: 2rem;
+    padding:2rem;
     .edit-button {
       border-color: #00bc77;
       background-color: #00bc77;
@@ -88,6 +100,7 @@
     margin-bottom: 2rem;
     border: 1px solid black;
     background: white;
+    margin-bottom: 80px;
     .account-content-wrapper {
       width: 100%;
       flex: 1;
@@ -121,5 +134,61 @@
         color: #fff;
       }
     }
+  }
+}
+
+// collapse edit name
+.mainContainer {
+  position: relative;
+  .collapsible-content {
+    position: absolute;
+    top: -1px;
+    width: 100%;
+    height: auto;
+    background: rgb(255, 255, 255);
+    margin: 0 auto;
+    margin-bottom: 30px;
+    .edit-user {
+      width: 400px;
+      margin: 0 auto;
+      margin-bottom: 100px;
+      h2{
+        margin-top:20px;
+      }
+      .form-group {
+        padding: 10px;
+        input {
+          width: 100px;
+          height: 30px;
+          margin: 5px;
+          border-radius: 5px;
+          border: 1px solid rgba(128, 128, 128, 0.541);
+        }
+      }
+      .button-group {
+        button {
+          cursor: pointer;
+          width: 150px;
+          height: 50px;
+          background: #00bc77;
+          border-radius: 5px;
+          margin: 5px;
+          border: none;
+          color: white;
+          font-size: 20px;
+        }
+        button:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+  .transaction-collapsible {
+    background: white;
+    width: 79.9%;
+    height: 400px;
+    margin: 0 auto;
+    margin-top: -80px;
+    margin-bottom: 20px;
   }
 }
