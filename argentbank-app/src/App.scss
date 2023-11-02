@@ -79,6 +79,9 @@
     color: #fff;
     margin-bottom: 2rem;
     padding:2rem;
+    h1{
+      padding:10px;
+    }
     .edit-button {
       border-color: #00bc77;
       background-color: #00bc77;
@@ -156,8 +159,9 @@
         margin-top:20px;
       }
       .form-group {
-        padding: 10px;
+        padding: 5px;
         input {
+          padding:5px;
           width: 100px;
           height: 30px;
           margin: 5px;
@@ -190,5 +194,11 @@
     margin: 0 auto;
     margin-top: -80px;
     margin-bottom: 20px;
+    .transaction-title{
+      width: 100%;
+      padding-top:20px;
+      display:flex;
+      justify-content: space-around;
+    }
   }
 }

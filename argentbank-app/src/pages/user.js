@@ -1,23 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "../App.scss";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {callApiGetUserData, callApiUpdateUserName} from '../callAPI/callAPI';
+import { setUserName, setFirstName, setLastName } from '../redux/actions';
+
 
 export default function Users() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
+  const firstName = useSelector((state) => state.firstName); 
+  const lastName = useSelector((state) => state.lastName);
+  const userName = useSelector((state) => state.userName);
+  const [newUserName, setNewUserName] = useState(userName);
 
-  // Utilisez Redux pour définir le token (utilisez ceci si vous avez un mécanisme pour définir le token après la connexion)
-  // const setTokenInRedux = (token) => {
-  //   store.dispatch(setAuthToken(token));
-  // };
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // Si le token n'est pas trouvé dans Redux, redirigez vers /signin
     if (!token) {
       navigate('/signin');
+    } else {
+      callApiGetUserData(token)
+        .then((userProfile) => {
+          dispatch(setUserName(userProfile.userName));
+          dispatch(setFirstName(userProfile.firstName));
+          dispatch(setLastName(userProfile.lastName));
+        })
+        .catch((error) => {
+          console.error('Échec de la récupération des données de l\'utilisateur :', error);
+        });
     }
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
   const [collapsibleStates, setCollapsibleStates] = useState([
@@ -25,8 +39,6 @@ export default function Users() {
     false, // Pour la deuxième collapsible
     false, // Pour la troisième collapsible
   ]);
-
-  // Je véririfer si il y a un TokenExpiredError, si non rediretction login ou home
 
   const toggleCollapsible = () => {
     setIsCollapsibleOpen(!isCollapsibleOpen);
@@ -42,14 +54,28 @@ export default function Users() {
     newCollapsibleStates[index] = !newCollapsibleStates[index];
     setCollapsibleStates(newCollapsibleStates);
   };
+  const saveUserName = () => {
+    if (newUserName.trim() === '') {
+      return;
+    }
+  
+    callApiUpdateUserName(token, newUserName)
+      .then((updatedData) => {
+      })
+      .catch((error) => {
+        console.error('Échec de la mise à jour du nom d\'utilisateur :', error);
+        // Gérer les erreurs en conséquence
+      });
+  };
+  
   return (
     <div>
       <main className="mainContainer">
         <div className="header">
           <h1>
-            Welcome back
+            Welcome back 
             <br />
-            Tony Jarvis!
+            {firstName} {lastName}
           </h1>
           {/* Formulaire */}
           <button className="edit-button" onClick={toggleCollapsible}>
@@ -62,18 +88,37 @@ export default function Users() {
               <h2>Edit user infos</h2>
               <div className="form-group">
                 <label htmlFor="userName">User Name :</label>
-                <input type="text" id="userName" name="userName" />
+                <input
+                  type="text"
+                  id="userName"
+                  name="userName"
+                  placeholder={userName}
+                  value={newUserName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="firstName">First Name :</label>
-                <input type="text" id="firstName" name="firstName" />
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  placeholder={firstName}
+                  disabled 
+                />
               </div>
               <div className="form-group">
                 <label htmlFor="lastName">Last Name :</label>
-                <input type="text" id="lastName" name="lastName" />
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  placeholder={lastName}
+                  disabled // Désactiver le champ
+                />
               </div>
               <div className="button-group">
-                <button className="save-button">Save</button>
+                <button className="save-button" onClick={saveUserName}>Save</button>
                 <button className="cancel-button" onClick={closeCollapsible}>Cancel</button>
               </div>
             </form>
@@ -92,7 +137,13 @@ export default function Users() {
         </section>
         {collapsibleStates[0] && (
               <div className="transaction-collapsible">
-                Contenu de la première collapsible
+                <div className="transaction-title">
+                  <p>Date</p>
+                  <p>Description</p>
+                  <p>Amount</p>
+                  <p>Balance</p>
+                </div>
+                <div className="transaction"></div>
               </div>
             )}
         <section className="account">
@@ -107,8 +158,14 @@ export default function Users() {
         </section>
         {collapsibleStates[1] && (
               <div className="transaction-collapsible">
-                Contenu de la deuxième collapsible
+              <div className="transaction-title">
+                <p>Date</p>
+                <p>Description</p>
+                <p>Amount</p>
+                <p>Balance</p>
               </div>
+              <div className="transaction"></div>
+            </div>
             )}
         <section className="account">
           <div className="account-content-wrapper">
@@ -122,8 +179,14 @@ export default function Users() {
         </section>
         {collapsibleStates[2] && (
               <div className="transaction-collapsible">
-                Contenu de la troisième collapsible
+              <div className="transaction-title">
+                <p>Date</p>
+                <p>Description</p>
+                <p>Amount</p>
+                <p>Balance</p>
               </div>
+              <div className="transaction"></div>
+            </div>
             )}
       </main>
     </div>

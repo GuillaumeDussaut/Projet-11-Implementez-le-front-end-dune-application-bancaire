@@ -33,6 +33,10 @@ header{
     }
     .signinContainer{
       width: auto;
+      .user-name{
+        font-size:18px;
+        font-weight: bold;
+      }
       i{
         font-size:30px;
         margin: auto 10px;
@@ -51,14 +55,7 @@ header{
     }
   }
 }
-  
-
-  
-
-  
-
-
-  .signinContainer{
+.signinContainer{
     width: 85px;
     height: 30px;
     display:flex;
@@ -67,5 +64,8 @@ header{
     .iconSignin{
       width: 20px;
       height: 20px;
+    }
+    h4{
+      cursor:pointer;
     }
   }
