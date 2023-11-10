@@ -1,6 +1,7 @@
 header{
   .main-nav {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     padding: 5px 22px;
@@ -67,5 +68,13 @@ header{
     }
     h4{
       cursor:pointer;
+    }
+  }
+  @media only screen and (max-width: 720px) and (min-width: 320px){
+    .main-nav{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
   }

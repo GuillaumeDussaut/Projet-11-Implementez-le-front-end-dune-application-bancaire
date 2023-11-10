@@ -7,9 +7,7 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   color: #2c3e50;
 }
-
 // Sign in
-
 .bg-dark {
   flex: 1;
   width: 100%;
@@ -59,17 +57,13 @@
       .sign-in-button:hover{
         transform:scale(1.05); 
       }
-
-      
     }
     .errorMsg{
       color:red;
     }
   }
 }
-
 // user
-
 .mainContainer {
   width: 100%;
   background-color: #12002b;
@@ -93,6 +87,7 @@
   .account {
     width: 80%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
@@ -118,7 +113,6 @@
         font-size: 2.5rem;
         font-weight: bold;
       }
-
       .account-amount-description {
         margin: 0;
       }
@@ -139,8 +133,7 @@
     }
   }
 }
-
-// collapse edit name
+// collapses
 .mainContainer {
   position: relative;
   .collapsible-content {
@@ -149,10 +142,13 @@
     width: 100%;
     height: auto;
     background: rgb(255, 255, 255);
-    margin: 0 auto;
     margin-bottom: 30px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     .edit-user {
-      width: 400px;
+      width: 100%;
       margin: 0 auto;
       margin-bottom: 100px;
       h2{
@@ -170,6 +166,10 @@
         }
       }
       .button-group {
+        display:flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
         button {
           cursor: pointer;
           width: 150px;
@@ -195,10 +195,84 @@
     margin-top: -80px;
     margin-bottom: 20px;
     .transaction-title{
-      width: 100%;
-      padding-top:20px;
+      width: 99%;
       display:flex;
       justify-content: space-around;
+      align-items: center;
+      margin: 0 auto;
+      p{
+      padding:10px;
+      }
+    }
+    .transaction{
+      width: 98%;
+      display:flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0 auto;
+      background: #00bc77;
+      position:relative;
+      p{
+        padding:10px;
+        color:white;
+      }
+      button{
+        cursor:pointer;
+        position: absolute;
+        right:20px;
+        color:white;
+        border:none;
+        background:transparent;
+        font-size:25px;
+      }
+    }
+    .detailsCollapse{
+      width: 98%;
+      display:flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin: 0 auto;
+      background: #00bc77;
+      p{
+        padding:20px;
+        color:white;
+        text-align:left;
+        i{
+          cursor:pointer;
+          margin-left:20px;
+        }
+      }
+      .detailsUser{
+        i{
+          cursor:pointer;
+          margin-left:20px;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 720px) and (min-width: 320px){
+  .mainContainer{
+    .account{
+      width:95%;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      .account-content-wrapper{
+        width: 100%;
+      }
+    }
+    .collapsible-content{
+      width: 100%;
+    }
+    .transaction-collapsible{
+      width: 95%;
+      font-size: 12px;
+      .transaction{
+        button{
+          position:unset;
+        }
+      }
     }
   }
 }

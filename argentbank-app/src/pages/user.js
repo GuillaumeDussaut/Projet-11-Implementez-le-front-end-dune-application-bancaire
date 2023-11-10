@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
-import "../App.scss";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import {callApiGetUserData, callApiUpdateUserName} from '../callAPI/callAPI';
-import { setUserName, setFirstName, setLastName } from '../redux/actions';
+import { useSelector, useDispatch } from "react-redux";
+import { callApiGetUserData, callApiUpdateUserName } from "../callAPI/callAPI";
+import { setUserName, setFirstName, setLastName } from "../redux/actions";
+import { CollapsibleMain1, CollapsibleMain2, CollapsibleMain3 } from "../content/collapses";
 
+import "../App.scss";
 
 export default function Users() {
   const navigate = useNavigate();
   const token = useSelector((state) => state.token);
-  const firstName = useSelector((state) => state.firstName); 
+  const firstName = useSelector((state) => state.firstName);
   const lastName = useSelector((state) => state.lastName);
   const userName = useSelector((state) => state.userName);
   const [newUserName, setNewUserName] = useState(userName);
-
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!token) {
-      navigate('/signin');
+      navigate("/signin");
     } else {
       callApiGetUserData(token)
         .then((userProfile) => {
@@ -28,56 +27,48 @@ export default function Users() {
           dispatch(setLastName(userProfile.lastName));
         })
         .catch((error) => {
-          console.error('Échec de la récupération des données de l\'utilisateur :', error);
+          console.error("Échec de la récupération des données de l'utilisateur :", error);
         });
     }
   }, [token, navigate, dispatch]);
 
+  const saveUserName = (e) => {
+    e.preventDefault()
+    if (newUserName.trim() === "") {
+      return;
+    }
+    callApiUpdateUserName(token, newUserName)
+      .then((updatedData) => {
+        dispatch(setUserName(newUserName));
+      })
+      .catch((error) => {
+        console.error("Échec de la mise à jour du nom d'utilisateur :", error);
+      });
+  };
+// partie collapses
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
-  const [collapsibleStates, setCollapsibleStates] = useState([
-    false, // Pour la première collapsible
-    false, // Pour la deuxième collapsible
-    false, // Pour la troisième collapsible
-  ]);
-
+  const [secondaryCollapsibleOpen, setSecondaryCollapsibleOpen] = useState([false, false, false]);
   const toggleCollapsible = () => {
     setIsCollapsibleOpen(!isCollapsibleOpen);
   };
-
-  const closeCollapsible = () => {
+  const closeCollapsible = (e) => {
+    e.preventDefault()
     setIsCollapsibleOpen(false);
   };
-
-  // Fonction pour gérer l'état de chaque collapsible par index
-  const toggleTransactionCollapsible = (index) => {
-    const newCollapsibleStates = [...collapsibleStates];
-    newCollapsibleStates[index] = !newCollapsibleStates[index];
-    setCollapsibleStates(newCollapsibleStates);
+  const toggleSecondaryCollapsible = (index) => {
+    const newSecondaryCollapsibleOpen = [...secondaryCollapsibleOpen];
+    newSecondaryCollapsibleOpen[index] = !newSecondaryCollapsibleOpen[index];
+    setSecondaryCollapsibleOpen(newSecondaryCollapsibleOpen);
   };
-  const saveUserName = () => {
-    if (newUserName.trim() === '') {
-      return;
-    }
-  
-    callApiUpdateUserName(token, newUserName)
-      .then((updatedData) => {
-      })
-      .catch((error) => {
-        console.error('Échec de la mise à jour du nom d\'utilisateur :', error);
-        // Gérer les erreurs en conséquence
-      });
-  };
-  
   return (
     <div>
       <main className="mainContainer">
         <div className="header">
           <h1>
-            Welcome back 
+            Welcome back
             <br />
             {firstName} {lastName}
           </h1>
-          {/* Formulaire */}
           <button className="edit-button" onClick={toggleCollapsible}>
             Edit Name
           </button>
@@ -85,7 +76,7 @@ export default function Users() {
         {isCollapsibleOpen && (
           <div className="collapsible-content">
             <form className="edit-user">
-              <h2>Edit user infos</h2>
+              <h2>Edit user info</h2>
               <div className="form-group">
                 <label htmlFor="userName">User Name :</label>
                 <input
@@ -99,27 +90,19 @@ export default function Users() {
               </div>
               <div className="form-group">
                 <label htmlFor="firstName">First Name :</label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  placeholder={firstName}
-                  disabled 
-                />
+                <input type="text" id="firstName" name="firstName" placeholder={firstName} disabled />
               </div>
               <div className="form-group">
                 <label htmlFor="lastName">Last Name :</label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  placeholder={lastName}
-                  disabled // Désactiver le champ
-                />
+                <input type="text" id="lastName" name="lastName" placeholder={lastName} disabled />
               </div>
               <div className="button-group">
-                <button className="save-button" onClick={saveUserName}>Save</button>
-                <button className="cancel-button" onClick={closeCollapsible}>Cancel</button>
+                <button className="save-button" onClick={(e) => saveUserName(e)}>
+                  Save
+                </button>
+                <button className="cancel-button" onClick={(e) => closeCollapsible(e)}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
@@ -128,24 +111,21 @@ export default function Users() {
         <section className="account">
           <div className="account-content-wrapper">
             <h3 className="account-title">Argent Bank Checking (x8349)</h3>
-            <p className="account-amount">$2,082,000.79</p>
+            <p className="account-amount">$2,082.79</p>
             <p className="account-amount-description">Available Balance</p>
           </div>
           <div className="account-content-wrapper cta">
-            <button className="transaction-button" onClick={() => toggleTransactionCollapsible(0)}>View transactions</button>
+            <button className="transaction-button" onClick={() => toggleSecondaryCollapsible(0)}>
+              View transactions
+            </button>
           </div>
         </section>
-        {collapsibleStates[0] && (
-              <div className="transaction-collapsible">
-                <div className="transaction-title">
-                  <p>Date</p>
-                  <p>Description</p>
-                  <p>Amount</p>
-                  <p>Balance</p>
-                </div>
-                <div className="transaction"></div>
-              </div>
-            )}
+        {secondaryCollapsibleOpen[0] && (
+          <CollapsibleMain1
+          onToggleSecondaryCollapsible={() => toggleSecondaryCollapsible(0)}
+            isSecondaryOpen={secondaryCollapsibleOpen[0]}
+          />
+        )}
         <section className="account">
           <div className="account-content-wrapper">
             <h3 className="account-title">Argent Bank Savings (x6712)</h3>
@@ -153,45 +133,36 @@ export default function Users() {
             <p className="account-amount-description">Available Balance</p>
           </div>
           <div className="account-content-wrapper cta">
-            <button className="transaction-button" onClick={() => toggleTransactionCollapsible(1)}>View transactions</button>
+            <button className="transaction-button" onClick={() => toggleSecondaryCollapsible(1)}>
+              View transactions
+            </button>
           </div>
         </section>
-        {collapsibleStates[1] && (
-              <div className="transaction-collapsible">
-              <div className="transaction-title">
-                <p>Date</p>
-                <p>Description</p>
-                <p>Amount</p>
-                <p>Balance</p>
-              </div>
-              <div className="transaction"></div>
-            </div>
-            )}
+        {secondaryCollapsibleOpen[1] && (
+          <CollapsibleMain2
+            onToggleCollapsible={() => toggleSecondaryCollapsible(1)}
+            isSecondaryOpen={secondaryCollapsibleOpen[1]}
+          />
+        )}
         <section className="account">
           <div className="account-content-wrapper">
             <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
-            <p className="account-amount">$184,000.30</p>
+            <p className="account-amount">$184.30</p>
             <p className="account-amount-description">Current Balance</p>
           </div>
           <div className="account-content-wrapper cta">
-            <button className="transaction-button" onClick={() => toggleTransactionCollapsible(2)}>View transactions</button>
+            <button className="transaction-button" onClick={() => toggleSecondaryCollapsible(2)}>
+              View transactions
+            </button>
           </div>
         </section>
-        {collapsibleStates[2] && (
-              <div className="transaction-collapsible">
-              <div className="transaction-title">
-                <p>Date</p>
-                <p>Description</p>
-                <p>Amount</p>
-                <p>Balance</p>
-              </div>
-              <div className="transaction"></div>
-            </div>
-            )}
+        {secondaryCollapsibleOpen[2] && (
+          <CollapsibleMain3
+            onToggleCollapsible={() => toggleSecondaryCollapsible(2)}
+            isSecondaryOpen={secondaryCollapsibleOpen[2]}
+          />
+        )}
       </main>
     </div>
   );
 }
-
-
-
