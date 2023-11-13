@@ -4,7 +4,6 @@ export async function callApiLogin(email, password) {
     email: email,
     password: password,
   };
-
   try {
     const response = await fetch('http://localhost:3001/api/v1/user/login', {
       method: 'POST',
@@ -13,16 +12,12 @@ export async function callApiLogin(email, password) {
       },
       body: JSON.stringify(requestBody),
     });
-
     if (!response.ok) {
       throw new Error('Échec de la connexion. Vérifiez vos informations d\'identification.');
     }
-
     const data = await response.json();
-
     if (data && data.body && data.body.token) {
       const authToken = data.body.token;
-
       return authToken;
     } else {
       throw new Error('La réponse du serveur ne contient pas de token valide.');
@@ -31,7 +26,6 @@ export async function callApiLogin(email, password) {
     throw err;
   }
 }
-
 // Fonction données utilisateur
 export async function callApiGetUserData(authToken) {
   try {
@@ -41,11 +35,9 @@ export async function callApiGetUserData(authToken) {
         'Authorization': `Bearer ${authToken}`
       },
     });
-
     if (!response.ok) {
       throw new Error('Échec de la récupération du pseudo.');
     }
-
     const data = await response.json();
     if (data && data.body && data.body.firstName && data.body.lastName && data.body.userName) {
       const userProfile = {
@@ -72,11 +64,9 @@ export async function callApiUpdateUserName(authToken, newUserName) {
       },
       body: JSON.stringify({ userName: newUserName }),
     });
-
     if (!response.ok) {
       throw new Error('Échec de la mise à jour du nom d\'utilisateur.');
     }
-
     const data = await response.json();
     return data;
   } catch (err) {
