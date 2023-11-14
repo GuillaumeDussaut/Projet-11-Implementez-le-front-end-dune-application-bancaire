@@ -8,6 +8,11 @@ host: localhost:3001
 basePath: /api/v1
 schemes:
   - http
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
 paths:
   /user/login:
     post:
@@ -111,7 +116,13 @@ paths:
       description: Retrieve multiple accounts
       operationId: findComptes
       parameters:
-        - name: user ID
+        - name: Authorization
+          in: header
+          description: Token Bearer (ajouter le mot "Bearer" suivi du token)
+          required: true
+          schema:
+            type: string      
+        - name: userID
           in: header
           description: 'ID user '
           required: true
@@ -141,6 +152,12 @@ paths:
       summary: Get compte transactions
       description: API to get compte transactions
       parameters:
+        - name: Authorization
+          in: header
+          description: Token Bearer (ajouter le mot "Bearer" suivi du token)
+          required: true
+          schema:
+            type: string 
         - name: compteId
           in: query
           description: 'Array of account IDs'
@@ -170,6 +187,12 @@ paths:
       summary: Get compte transaction details
       description: API to get details of a specific transaction
       parameters:
+        - name: Authorization
+          in: header
+          description: Token Bearer (ajouter le mot "Bearer" suivi du token)
+          required: true
+          schema:
+            type: string 
         - name: transactionId
           in: path
           description: 'récupération des détails des transactions par compte'
@@ -197,6 +220,12 @@ paths:
       description: ''
       operationId: putDetails
       parameters:
+        - name: Authorization
+          in: header
+          description: Token Bearer (ajouter le mot "Bearer" suivi du token)
+          required: true
+          schema:
+            type: string 
         - name: transactionDetails
           in: body
           description: Transaction Details Payload
