@@ -33,7 +33,6 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
   /user/signup:
     post:
       tags:
@@ -58,7 +57,6 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
   /user/profile:
     post:
       security:
@@ -67,9 +65,11 @@ paths:
         - User Module
       summary: User Profile API
       description: API for fetching a user profile
+      produces:
+       - application/json
       responses:
         '200':
-          description: User profile retrieved successfully
+          description: User profile retrieved successully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -94,14 +94,13 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successfully
+          description: User profile retrieved successully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-
   /comptes:
     get:
       security:
@@ -112,15 +111,15 @@ paths:
       description: Retrieve multiple accounts
       operationId: findComptes
       parameters:
-        - name: comptes
-          in: query
-          description: 'Array of account IDs'
+        - name: user ID
+          in: header
+          description: 'ID user '
           required: true
           schema:
-            type: array
-            items:
-              type: string
+            type: integer
       responses:
+        security:
+          - Bearer: []
         '200':
           description: Successful response
           schema:
@@ -131,6 +130,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
+
 
   /compte/transactions:
     get:
@@ -188,42 +188,6 @@ paths:
         '500':
           description: Internal Server Error
 
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - Comptes Module
-      summary: Modify compte transaction details
-      description: ''
-      operationId: uploadDetails
-      parameters:
-        - name: transactionDetails
-          in: body
-          description: Transaction Details Payload
-          required: true
-          schema:
-            $ref: '#/definitions/TransactionDetailsPayload'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            examples:
-              example1:
-                value:
-                  Category: 'Food'
-                  Note: 'Lorem'
-      responses:
-        '201':
-          description: Transaction details created successfully
-          schema:
-            $ref: '#/definitions/TransactionDetailsPayload'
-        '400':
-          description: Invalid Fields
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal Server Error
-
     put:
       security:
         - Bearer: []
@@ -259,41 +223,11 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-
-    delete:
-      security:
-        - Bearer: []
-      tags:
-        - Comptes Module
-      summary: Delete compte transaction details
-      description: API to delete details for a transaction
-      parameters:
-        - in: path
-          name: transactionId
-          description: 'ID of the transaction'
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            example:
-              Category: 'Food'
-              Note: 'Lorem'
-      responses:
-        '204':
-          description: Successfully deleted
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal Server Error
-
 securityDefinitions:
   Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+      type: apiKey
+      name: Authorization
+      in: header
 definitions:
   User:
     properties:
@@ -378,6 +312,22 @@ definitions:
   TransactionDetails:
     type: object
     properties:
+      id:
+        type: integer
+        format: int64
+        example: 3
+      date:
+        type: string
+        example: 27/02/2020
+      description:
+        type: string
+        example: Golden sun Bakery
+      Amount:
+        type: string
+        example: $8.00
+      Balance: 
+        type: string 
+        example: $298
       transactionType:
         type: string
         example: Electronic
@@ -396,3 +346,4 @@ definitions:
       Note:
         type: string
         example: Lorem
+
